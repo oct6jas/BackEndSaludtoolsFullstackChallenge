@@ -27,7 +27,7 @@ public class PatientServiceImplementation implements PatientService {
     PatientRepository patientRepository;
 
     @Autowired
-    UtilitiesService utilitiesFile;
+    UtilitiesService utilitiesService;
 
 
     @Override
@@ -35,7 +35,7 @@ public class PatientServiceImplementation implements PatientService {
         validateDto(dto);
         String birthDate = dto.getBirthDay().trim() + " " + "00:00";
         Patient patient = patientMapper.patientDtoToPatient(dto);
-        patient.setBirthDay(utilitiesFile.textDateToZonedDateTime(birthDate));
+        patient.setBirthDay(utilitiesService.textDateToZonedDateTime(birthDate));
         patient = patientRepository.save(patient);
         return patient;
     }
@@ -44,31 +44,19 @@ public class PatientServiceImplementation implements PatientService {
     public Patient update(PatientDto dto) throws BasicException {
         validateDto(dto);
         String birthDate = dto.getBirthDay().trim() + " " + "00:00";
-        Patient patient = patientRepository.getPatientById(dto.getId());
+        Patient patient = utilitiesService.validatePatient(dto.getId());
         patientMapper.toUpdate(dto, patient);
-        patient.setBirthDay(utilitiesFile.textDateToZonedDateTime(birthDate));
+        patient.setBirthDay(utilitiesService.textDateToZonedDateTime(birthDate));
         patient = patientRepository.save(patient);
         return patient;
     }
 
     @Override
     public PatientDeleteDto delete(PatientDto dto) throws BasicException {
-        validateDeleteDto(dto);
+        utilitiesService.validatePatient(dto.getId());
         patientRepository.deletePatientById(dto.getId());
         PatientDeleteDto patientDeleteDto = patientRepository.getPatientDelete(dto.getId());
         return patientDeleteDto;
-    }
-
-    private void validateDeleteDto(PatientDto dto) throws BasicException {
-        if(isNull(dto.getId())){
-            throw new BasicException(400, "El id del paciente no puede ser null");
-        }
-
-        Patient patientToDelete = patientRepository.getPatientById(dto.getId());
-
-        if(isNull(patientToDelete)){
-            throw new BasicException(400, "No existe paciente con id: " + dto.getId());
-        }
     }
 
     private void validateDto(PatientDto dto) throws BasicException {
