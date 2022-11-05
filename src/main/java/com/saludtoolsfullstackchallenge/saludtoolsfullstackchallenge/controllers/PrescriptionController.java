@@ -1,5 +1,6 @@
 package com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.controllers;
 
+import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.BasicDeleteDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PrescriptionDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.entities.Prescription;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.exceptions.BasicException;
@@ -45,12 +46,12 @@ public class PrescriptionController {
         return new ResponseEntity<>(PrescriptionDto , HttpStatus.OK);
     }
 
-//    @CrossOrigin
-//    @PutMapping(value = "/delete", produces= MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<PrescriptionDeleteDto> deletePrescription(@RequestBody PrescriptionDto request) throws BasicException {
-//        PrescriptionDeleteDto PrescriptionDelete = PrescriptionService.delete(request);
-//        return new ResponseEntity<>(PrescriptionDelete , HttpStatus.OK);
-//    }
+    @CrossOrigin
+    @PutMapping(value = "/delete", produces= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BasicDeleteDto> deletePrescription(@RequestBody PrescriptionDto request) throws BasicException {
+        BasicDeleteDto PrescriptionDelete = prescriptionService.delete(request);
+        return new ResponseEntity<>(PrescriptionDelete , HttpStatus.OK);
+    }
 //
 //    @CrossOrigin
 //    @GetMapping(value = "/filter", produces= MediaType.APPLICATION_JSON_VALUE)

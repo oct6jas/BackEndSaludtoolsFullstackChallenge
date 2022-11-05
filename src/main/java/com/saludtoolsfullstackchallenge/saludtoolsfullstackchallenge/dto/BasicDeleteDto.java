@@ -5,15 +5,15 @@ import lombok.Data;
 import java.time.ZonedDateTime;
 
 @Data
-public class PatientDeleteDto {
+public class BasicDeleteDto {
 
     private Long id;
     private ZonedDateTime deleteDate;
 
-    public PatientDeleteDto() {
+    public BasicDeleteDto() {
     }
 
-    public PatientDeleteDto(Long id, ZonedDateTime delete_date) {
+    public BasicDeleteDto(Long id, ZonedDateTime delete_date) {
         this.id = id;
         this.deleteDate = delete_date;
     }

@@ -1,6 +1,6 @@
 package com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.services.implementations;
 
-import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PatientDeleteDto;
+import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.BasicDeleteDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PatientDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.entities.Patient;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.exceptions.BasicException;
@@ -196,7 +196,7 @@ class PatientServiceImplementationTest {
 
         Patient patientToDelete = new Patient();
 
-        PatientDeleteDto deletePatientMock = new PatientDeleteDto();
+        BasicDeleteDto deletePatientMock = new BasicDeleteDto();
         deletePatientMock.setId(1L);
         deletePatientMock.setDeleteDate(ZonedDateTime.now());
 
@@ -204,7 +204,7 @@ class PatientServiceImplementationTest {
         doNothing().when(patientRepository).deletePatientById(Mockito.any(Long.class));
         when(patientRepository.getPatientDelete(patientDto.getId())).thenReturn(deletePatientMock);
         //act
-        PatientDeleteDto patientDeleteResponse = patientServiceImplementation.delete(patientDto);
+        BasicDeleteDto patientDeleteResponse = patientServiceImplementation.delete(patientDto);
         //assert
         Assertions.assertEquals(deletePatientMock.getId(), patientDeleteResponse.getId());
         Assertions.assertEquals(deletePatientMock.getDeleteDate(), patientDeleteResponse.getDeleteDate());

@@ -1,9 +1,9 @@
 package com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.services.implementations;
 
 
+import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.BasicDeleteDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PrescriptionDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.entities.Medicine;
-import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.entities.Patient;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.entities.Prescription;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.exceptions.BasicException;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.mapstruct.PrescriptionMapper;
@@ -40,6 +40,7 @@ public class PrescriptionServiceImplementation implements PrescriptionService {
     public Prescription create(PrescriptionDto dto) throws BasicException {
         dto.setCreateDate(ZonedDateTime.now(ZoneId.of("America/Bogota")));
         validateDto(dto);
+        validateMedicine(dto.getMedicineId());
         Prescription prescription = prescriptionMapper.prescriptionDtoToPrescription(dto);
         prescription = prescriptionRepository.save(prescription);
         return prescription;
@@ -56,22 +57,20 @@ public class PrescriptionServiceImplementation implements PrescriptionService {
         return prescription;
     }
 
-    private void validateMedicine(Long medicineId) throws BasicException {
-        if(isNull(medicineId)){
-            throw new BasicException(400, "El id del medicamento no puede ser null");
-        }
-        Medicine medicine = medicineRepository.getMedicineById(medicineId);
-
-        if(isNull(medicine)){
-            throw new BasicException(400, "No existe medicamento con id: " + medicineId);
-        }
-
+    @Override
+    public BasicDeleteDto delete(PrescriptionDto dto) throws BasicException {
+        validatePrescription(dto.getId(), dto.getPatientId());
+        prescriptionRepository.deletePrescriptionById(dto.getId());
+        BasicDeleteDto prescriptionDeleteDto = prescriptionRepository.getPrescriptionDelete(dto.getId());
+        return prescriptionDeleteDto;
     }
 
     private void validateDto(PrescriptionDto dto) throws BasicException {
         if(isNull(dto.getPatientId())){
             throw new BasicException(400, "El id del paciente no puede ser null");
         }
+        utilitiesService.validatePatient(dto.getPatientId());
+
         if(isNull(dto.getCreateDate())){
             throw new BasicException(400, "La fecha de creacion no puede ser null");
         }
@@ -90,5 +89,17 @@ public class PrescriptionServiceImplementation implements PrescriptionService {
             throw new BasicException(400, "No existe prescripcion con id: " + id + " Para ese paciente");
         }
         return prescriptionToUpdate;
+    }
+
+    private void validateMedicine(Long medicineId) throws BasicException {
+        if(isNull(medicineId)){
+            throw new BasicException(400, "El id del medicamento no puede ser null");
+        }
+        Medicine medicine = medicineRepository.getMedicineById(medicineId);
+
+        if(isNull(medicine)){
+            throw new BasicException(400, "No existe medicamento con id: " + medicineId);
+        }
+
     }
 }

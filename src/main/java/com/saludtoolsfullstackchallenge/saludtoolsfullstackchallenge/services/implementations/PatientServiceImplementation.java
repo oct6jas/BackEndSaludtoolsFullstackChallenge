@@ -1,6 +1,6 @@
 package com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.services.implementations;
 
-import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PatientDeleteDto;
+import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.BasicDeleteDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PatientDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.entities.Patient;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.exceptions.BasicException;
@@ -52,10 +52,10 @@ public class PatientServiceImplementation implements PatientService {
     }
 
     @Override
-    public PatientDeleteDto delete(PatientDto dto) throws BasicException {
+    public BasicDeleteDto delete(PatientDto dto) throws BasicException {
         utilitiesService.validatePatient(dto.getId());
         patientRepository.deletePatientById(dto.getId());
-        PatientDeleteDto patientDeleteDto = patientRepository.getPatientDelete(dto.getId());
+        BasicDeleteDto patientDeleteDto = patientRepository.getPatientDelete(dto.getId());
         return patientDeleteDto;
     }
 

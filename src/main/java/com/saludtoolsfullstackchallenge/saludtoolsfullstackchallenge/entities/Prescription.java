@@ -25,4 +25,7 @@ public class Prescription {
 
     @Column(name = "medicine_id")
     private Long medicineId;
+
+    @Column(name = "delete_date")
+    private ZonedDateTime deleteDate;
 }

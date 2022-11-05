@@ -1,6 +1,6 @@
 package com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.controllers;
 
-import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PatientDeleteDto;
+import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.BasicDeleteDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PatientDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.entities.Patient;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.exceptions.BasicException;
@@ -47,8 +47,8 @@ public class PatientController {
 
     @CrossOrigin
     @PutMapping(value = "/delete", produces= MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PatientDeleteDto> deletePatient(@RequestBody PatientDto request) throws BasicException {
-        PatientDeleteDto patientDelete = patientService.delete(request);
+    public ResponseEntity<BasicDeleteDto> deletePatient(@RequestBody PatientDto request) throws BasicException {
+        BasicDeleteDto patientDelete = patientService.delete(request);
         return new ResponseEntity<>(patientDelete , HttpStatus.OK);
     }
 

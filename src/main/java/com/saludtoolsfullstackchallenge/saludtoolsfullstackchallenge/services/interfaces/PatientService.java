@@ -1,6 +1,6 @@
 package com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.services.interfaces;
 
-import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PatientDeleteDto;
+import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.BasicDeleteDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PatientDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.entities.Patient;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.exceptions.BasicException;
@@ -13,7 +13,7 @@ public interface PatientService {
 
     Patient update(PatientDto dto) throws BasicException;
 
-    PatientDeleteDto delete(PatientDto dto) throws BasicException;
+    BasicDeleteDto delete(PatientDto dto) throws BasicException;
 
     Page<PatientDto> findAllBysearchTextAndGender(String textToSearch, Long genderId, Pageable pageable);
 }
