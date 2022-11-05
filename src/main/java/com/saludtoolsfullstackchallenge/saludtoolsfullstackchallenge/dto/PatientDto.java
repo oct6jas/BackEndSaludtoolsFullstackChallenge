@@ -2,10 +2,6 @@ package com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-
-import java.time.ZonedDateTime;
-
 @Data
 public class PatientDto {
 
