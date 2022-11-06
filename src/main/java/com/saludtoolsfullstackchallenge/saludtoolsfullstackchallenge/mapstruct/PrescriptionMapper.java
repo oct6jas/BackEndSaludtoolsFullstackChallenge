@@ -4,8 +4,6 @@ import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.Prescri
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.entities.Prescription;
 import org.mapstruct.*;
 
-import java.time.ZonedDateTime;
-
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface PrescriptionMapper {
 
@@ -14,7 +12,11 @@ public interface PrescriptionMapper {
     @Mapping(ignore = true, target = "id")
     Prescription prescriptionDtoToPrescription(PrescriptionDto dto);
 
-    @Mapping(ignore = true, target = "id")
+    @Mappings({
+            @Mapping(ignore = true, target = "id"),
+            @Mapping(ignore = true, target = "createDate"),
+            @Mapping(ignore = true, target = "patientId")
+    })
     public void toUpdate(PrescriptionDto dto, @MappingTarget Prescription target);
 
 }

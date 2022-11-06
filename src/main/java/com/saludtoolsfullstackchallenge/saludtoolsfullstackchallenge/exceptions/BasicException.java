@@ -12,6 +12,4 @@ public class BasicException extends Exception{
     public Integer getCode() {
         return code;
     }
-
-
 }

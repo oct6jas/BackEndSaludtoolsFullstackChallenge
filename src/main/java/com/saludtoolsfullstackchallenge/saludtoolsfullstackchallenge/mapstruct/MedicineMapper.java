@@ -4,9 +4,11 @@ import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.Medicin
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.entities.Medicine;
 import org.mapstruct.*;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface MedicineMapper {
 
-    MedicineDto medicineTomedicineDto(Medicine medicine);
+    List<MedicineDto> medicineTomedicineDto(List<Medicine> medicines);
 
 }

@@ -52,18 +52,17 @@ public class PrescriptionController {
         BasicDeleteDto PrescriptionDelete = prescriptionService.delete(request);
         return new ResponseEntity<>(PrescriptionDelete , HttpStatus.OK);
     }
-//
-//    @CrossOrigin
-//    @GetMapping(value = "/filter", produces= MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<Page<PrescriptionDto>> filterPrescription(@RequestParam("page") int page,
-//                                                          @RequestParam("size") int size,
-//                                                          @RequestParam(value = "textToSearch", required = false) String textToSearch,
-//                                                          @RequestParam(value = "genderId", required = false) Long genderId) throws BasicException {
-//
-//        List<Sort.Order> listOrders = new ArrayList<Sort.Order>();
-//        listOrders.add(new Sort.Order(Sort.Direction.DESC, "id"));
-//        Pageable pageable = PageRequest.of(page, size);
-//        Page<PrescriptionDto> PrescriptionDtoPage = PrescriptionService.findAllBysearchTextAndGender(textToSearch, genderId, pageable);
-//        return new ResponseEntity<>(PrescriptionDtoPage , HttpStatus.OK);
-//    }
+
+    @CrossOrigin
+    @GetMapping(value = "/filter/patient", produces= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Page<PrescriptionDto>> filterPrescriptionByPatient(@RequestParam("page") int page,
+                                                          @RequestParam(value = "patientId", required = true) Long patientId) throws BasicException {
+
+        int size = 10;
+        List<Sort.Order> listOrders = new ArrayList<Sort.Order>();
+        listOrders.add(new Sort.Order(Sort.Direction.DESC, "id"));
+        Pageable pageable = PageRequest.of(page, size);
+        Page<PrescriptionDto> PrescriptionDtoPage = prescriptionService.findAllPrescriptionByPatientId(patientId, pageable);
+        return new ResponseEntity<>(PrescriptionDtoPage , HttpStatus.OK);
+    }
 }

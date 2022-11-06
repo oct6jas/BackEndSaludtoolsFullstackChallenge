@@ -1,6 +1,5 @@
 package com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.utilities;
 
-import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PatientDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.entities.Patient;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.exceptions.BasicException;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.repositories.PatientRepository;
@@ -10,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 import static java.util.Objects.isNull;
 
@@ -41,5 +41,11 @@ public class UtilitiesService {
         }
 
         return patient;
+    }
+
+    public Long agePatient(Patient patient) throws BasicException {
+        ZonedDateTime birthDayPatient = patient.getBirthDay();
+        Long age = ChronoUnit.YEARS.between(birthDayPatient, ZonedDateTime.now());
+        return age;
     }
 }

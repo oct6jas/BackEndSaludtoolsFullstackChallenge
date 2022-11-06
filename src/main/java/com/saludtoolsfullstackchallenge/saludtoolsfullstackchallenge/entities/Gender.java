@@ -1,11 +1,7 @@
 package com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.entities;
 
-
-import lombok.Data;
 import lombok.Getter;
-
 import javax.persistence.*;
-import java.time.ZonedDateTime;
 
 
 @Entity

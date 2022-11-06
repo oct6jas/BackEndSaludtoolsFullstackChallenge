@@ -12,6 +12,8 @@ import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.repositorie
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.services.interfaces.PrescriptionService;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.utilities.UtilitiesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,19 +40,16 @@ public class PrescriptionServiceImplementation implements PrescriptionService {
 
     @Override
     public Prescription create(PrescriptionDto dto) throws BasicException {
-        dto.setCreateDate(ZonedDateTime.now(ZoneId.of("America/Bogota")));
         validateDto(dto);
-        validateMedicine(dto.getMedicineId());
         Prescription prescription = prescriptionMapper.prescriptionDtoToPrescription(dto);
+        prescription.setCreateDate(ZonedDateTime.now(ZoneId.of("America/Bogota")));
         prescription = prescriptionRepository.save(prescription);
         return prescription;
     }
 
     @Override
     public Prescription update(PrescriptionDto dto) throws BasicException {
-        dto.setCreateDate(ZonedDateTime.now(ZoneId.of("America/Bogota")));
         validateDto(dto);
-        validateMedicine(dto.getMedicineId());
         Prescription prescription = validatePrescription(dto.getId(), dto.getPatientId());
         prescriptionMapper.toUpdate(dto, prescription);
         prescription = prescriptionRepository.save(prescription);
@@ -66,14 +65,10 @@ public class PrescriptionServiceImplementation implements PrescriptionService {
     }
 
     private void validateDto(PrescriptionDto dto) throws BasicException {
-        if(isNull(dto.getPatientId())){
-            throw new BasicException(400, "El id del paciente no puede ser null");
-        }
+
         utilitiesService.validatePatient(dto.getPatientId());
 
-        if(isNull(dto.getCreateDate())){
-            throw new BasicException(400, "La fecha de creacion no puede ser null");
-        }
+        validateMedicine(dto.getMedicineId());
     }
 
     private Prescription validatePrescription(Long id, Long patientId) throws BasicException {
@@ -100,6 +95,11 @@ public class PrescriptionServiceImplementation implements PrescriptionService {
         if(isNull(medicine)){
             throw new BasicException(400, "No existe medicamento con id: " + medicineId);
         }
+    }
 
+    @Override
+    public Page<PrescriptionDto> findAllPrescriptionByPatientId(Long patientId, Pageable pageable) {
+        Page<PrescriptionDto> prescriptionDtoPage = prescriptionRepository.findAllPrescriptionByPatientId(patientId, pageable);
+        return prescriptionDtoPage;
     }
 }
