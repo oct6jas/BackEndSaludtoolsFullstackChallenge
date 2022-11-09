@@ -3,6 +3,7 @@ package com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.services.i
 
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.BasicDeleteDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PrescriptionDto;
+import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PrescriptionResponseDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.entities.Medicine;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.entities.Prescription;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.exceptions.BasicException;
@@ -98,8 +99,16 @@ public class PrescriptionServiceImplementation implements PrescriptionService {
     }
 
     @Override
-    public Page<PrescriptionDto> findAllPrescriptionByPatientId(Long patientId, Pageable pageable) {
-        Page<PrescriptionDto> prescriptionDtoPage = prescriptionRepository.findAllPrescriptionByPatientId(patientId, pageable);
+    public Page<PrescriptionResponseDto> findAllPrescriptionByPatientId(Long patientId, Pageable pageable) {
+        Page<PrescriptionResponseDto> prescriptionDtoPage = prescriptionRepository.findAllPrescriptionByPatientId(patientId, pageable);
+        getMedicineName(prescriptionDtoPage);
         return prescriptionDtoPage;
+    }
+
+    private void getMedicineName(Page<PrescriptionResponseDto> prescriptionDtoPage) {
+        for(PrescriptionResponseDto prescriptionResponseDto: prescriptionDtoPage){
+            Medicine medicine = medicineRepository.getMedicineById(prescriptionResponseDto.getMedicineId());
+            prescriptionResponseDto.setMedicineName(medicine.getName());
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.controller
 
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.BasicDeleteDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PrescriptionDto;
+import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PrescriptionResponseDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.entities.Prescription;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.exceptions.BasicException;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.mapstruct.PrescriptionMapper;
@@ -55,14 +56,14 @@ public class PrescriptionController {
 
     @CrossOrigin
     @GetMapping(value = "/filter/patient", produces= MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Page<PrescriptionDto>> filterPrescriptionByPatient(@RequestParam("page") int page,
-                                                          @RequestParam(value = "patientId", required = true) Long patientId) throws BasicException {
+    public ResponseEntity<Page<PrescriptionResponseDto>> filterPrescriptionByPatient(@RequestParam("page") int page,
+                                                                                     @RequestParam(value = "patientId", required = true) Long patientId) throws BasicException {
 
         int size = 10;
         List<Sort.Order> listOrders = new ArrayList<Sort.Order>();
-        listOrders.add(new Sort.Order(Sort.Direction.DESC, "id"));
-        Pageable pageable = PageRequest.of(page, size);
-        Page<PrescriptionDto> PrescriptionDtoPage = prescriptionService.findAllPrescriptionByPatientId(patientId, pageable);
+        listOrders.add(new Sort.Order(Sort.Direction.DESC, "createDate"));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(listOrders));
+        Page<PrescriptionResponseDto> PrescriptionDtoPage = prescriptionService.findAllPrescriptionByPatientId(patientId, pageable);
         return new ResponseEntity<>(PrescriptionDtoPage , HttpStatus.OK);
     }
 }

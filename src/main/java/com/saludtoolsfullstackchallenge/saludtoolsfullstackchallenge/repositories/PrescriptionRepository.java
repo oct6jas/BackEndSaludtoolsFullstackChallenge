@@ -2,6 +2,7 @@ package com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.repositori
 
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.BasicDeleteDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PrescriptionDto;
+import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PrescriptionResponseDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.entities.Prescription;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +26,7 @@ public interface PrescriptionRepository extends JpaRepository<Prescription, Long
     @Query("SELECT new com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.BasicDeleteDto(prescription.id, prescription.deleteDate) FROM Prescription prescription WHERE prescription.id = :prescriptionId")
     BasicDeleteDto getPrescriptionDelete(@Param("prescriptionId") Long prescriptionId);
 
-    @Query("SELECT new com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PrescriptionDto(prescription.id, prescription.createDate, prescription.patientId, prescription.medicineId) FROM Prescription prescription WHERE prescription.patientId = :patientId AND prescription.deleteDate IS NULL")
-    Page<PrescriptionDto> findAllPrescriptionByPatientId(@Param("patientId") Long patientId, Pageable pageable);
+    @Query("SELECT new com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PrescriptionResponseDto(prescription.id, prescription.createDate, prescription.patientId, prescription.medicineId) FROM Prescription prescription WHERE prescription.patientId = :patientId AND prescription.deleteDate IS NULL")
+    Page<PrescriptionResponseDto> findAllPrescriptionByPatientId(@Param("patientId") Long patientId, Pageable pageable);
 
 }
