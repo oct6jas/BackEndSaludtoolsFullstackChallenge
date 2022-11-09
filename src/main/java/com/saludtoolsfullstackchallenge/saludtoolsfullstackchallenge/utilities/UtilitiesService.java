@@ -1,7 +1,9 @@
 package com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.utilities;
 
+import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PatientResponseDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.entities.Patient;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.exceptions.BasicException;
+import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.repositories.GenderRepository;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.repositories.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,9 @@ public class UtilitiesService {
 
     @Autowired
     PatientRepository patientRepository;
+
+    @Autowired
+    GenderRepository genderRepository;
 
     public ZonedDateTime textDateToZonedDateTime(String date) throws BasicException {
         try {
@@ -47,5 +52,17 @@ public class UtilitiesService {
         ZonedDateTime birthDayPatient = patient.getBirthDay();
         Long age = ChronoUnit.YEARS.between(birthDayPatient, ZonedDateTime.now());
         return age;
+    }
+
+    public Long agePatient(PatientResponseDto patient) throws BasicException {
+        String birthDate = patient.getBirthDay().trim() + " " + "00:00";
+        ZonedDateTime birthDayPatient = textDateToZonedDateTime(birthDate);
+        Long age = ChronoUnit.YEARS.between(birthDayPatient, ZonedDateTime.now());
+        return age;
+    }
+
+    public String genderPatient(PatientResponseDto patient){
+        String gender = genderRepository.getGenderNameById(patient.getGenderId());
+        return gender;
     }
 }

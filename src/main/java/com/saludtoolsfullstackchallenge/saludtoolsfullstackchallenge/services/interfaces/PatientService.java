@@ -2,6 +2,7 @@ package com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.services.i
 
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.BasicDeleteDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PatientDto;
+import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PatientResponseDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.entities.Patient;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.exceptions.BasicException;
 import org.springframework.data.domain.Page;
@@ -15,5 +16,7 @@ public interface PatientService {
 
     BasicDeleteDto delete(PatientDto dto) throws BasicException;
 
-    Page<PatientDto> findAllBysearchTextAndGender(String textToSearch, Long genderId, Pageable pageable);
+    Page<PatientResponseDto> findAllBysearchTextAndGender(String textToSearch, Long genderId, Pageable pageable) throws BasicException;
+
+    PatientResponseDto getPatientById(Long patientId) throws BasicException;
 }

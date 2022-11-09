@@ -2,6 +2,7 @@ package com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.repositori
 
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.BasicDeleteDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PatientDto;
+import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PatientResponseDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.entities.Patient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,10 +26,10 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     BasicDeleteDto getPatientDelete(@Param("patientId") Long patientId);
 
 
-    @Query("SELECT new com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PatientDto(p.id, p.name, p.lastName, "
+    @Query("SELECT new com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PatientResponseDto(p.id, p.name, p.lastName, "
             + " p.birthDay, p.genderId) FROM Patient p"
             + " WHERE (:searchText IS NULL OR p.name LIKE :textToSearch OR p.lastName LIKE :textToSearch) "
             + " AND (:genderId IS NULL OR p.genderId = :genderId) AND p.deleteDate IS NULL")
-    public Page<PatientDto> getPatientBySearchTextAndGender(@Param(value = "textToSearch") String textToSearch, @Param(value = "searchText") Long searchText, @Param(value = "genderId") Long genderId, Pageable pag );
+    public Page<PatientResponseDto> getPatientBySearchTextAndGender(@Param(value = "textToSearch") String textToSearch, @Param(value = "searchText") Long searchText, @Param(value = "genderId") Long genderId, Pageable pag );
 
 }

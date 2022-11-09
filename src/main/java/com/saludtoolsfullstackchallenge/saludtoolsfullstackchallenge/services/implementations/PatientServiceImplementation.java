@@ -2,6 +2,7 @@ package com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.services.i
 
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.BasicDeleteDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PatientDto;
+import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PatientResponseDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.entities.Patient;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.exceptions.BasicException;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.mapstruct.PatientMapper;
@@ -84,13 +85,30 @@ public class PatientServiceImplementation implements PatientService {
     }
 
     @Override
-    public Page<PatientDto> findAllBysearchTextAndGender(String textToSearch, Long genderId, Pageable pageable) {
+    public Page<PatientResponseDto> findAllBysearchTextAndGender(String textToSearch, Long genderId, Pageable pageable) throws BasicException {
         Long searchText = null;
         if (textToSearch != null && !textToSearch.isEmpty()) {
             textToSearch = "%"+textToSearch.trim().replaceAll("\\s", "%")+"%";
             searchText=0L;
         }
-        Page<PatientDto> patientDtoPage = patientRepository.getPatientBySearchTextAndGender(textToSearch, searchText, genderId, pageable);
+        Page<PatientResponseDto> patientDtoPage = patientRepository.getPatientBySearchTextAndGender(textToSearch, searchText, genderId, pageable);
+
+        for(PatientResponseDto patientResponseDto: patientDtoPage) {
+            getGenderAndAge(patientResponseDto);
+        }
         return patientDtoPage;
+    }
+
+    private void getGenderAndAge(PatientResponseDto patientResponseDto) throws BasicException {
+            patientResponseDto.setAge(utilitiesService.agePatient(patientResponseDto));
+            patientResponseDto.setGender(utilitiesService.genderPatient(patientResponseDto));
+    }
+
+    @Override
+    public PatientResponseDto getPatientById(Long patientId) throws BasicException {
+        Patient patient = utilitiesService.validatePatient(patientId);
+        PatientResponseDto patientDto = patientMapper.patientToPatientResponseDto(patient);
+        getGenderAndAge(patientDto);
+        return patientDto;
     }
 }
