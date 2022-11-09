@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 import static java.util.Objects.isNull;
 
@@ -80,11 +81,11 @@ public class PrescriptionServiceImplementation implements PrescriptionService {
 
         utilitiesService.validatePatient(patientId);
 
-        Prescription prescriptionToUpdate = prescriptionRepository.getPrescriptionByIdAndPatientId(id, patientId);
-        if(isNull(prescriptionToUpdate)){
+        Prescription prescription = prescriptionRepository.getPrescriptionByIdAndPatientId(id, patientId);
+        if(isNull(prescription)){
             throw new BasicException(400, "No existe prescripcion con id: " + id + " Para ese paciente");
         }
-        return prescriptionToUpdate;
+        return prescription;
     }
 
     private void validateMedicine(Long medicineId) throws BasicException {
@@ -101,14 +102,32 @@ public class PrescriptionServiceImplementation implements PrescriptionService {
     @Override
     public Page<PrescriptionResponseDto> findAllPrescriptionByPatientId(Long patientId, Pageable pageable) {
         Page<PrescriptionResponseDto> prescriptionDtoPage = prescriptionRepository.findAllPrescriptionByPatientId(patientId, pageable);
-        getMedicineName(prescriptionDtoPage);
+        for(PrescriptionResponseDto prescriptionResponseDto: prescriptionDtoPage) {
+            getMedicineName(prescriptionResponseDto);
+        }
         return prescriptionDtoPage;
     }
 
-    private void getMedicineName(Page<PrescriptionResponseDto> prescriptionDtoPage) {
-        for(PrescriptionResponseDto prescriptionResponseDto: prescriptionDtoPage){
+    private void getMedicineName(PrescriptionResponseDto prescriptionResponseDto) {
             Medicine medicine = medicineRepository.getMedicineById(prescriptionResponseDto.getMedicineId());
             prescriptionResponseDto.setMedicineName(medicine.getName());
+    }
+
+    @Override
+    public Boolean createValidateForMonth(Long patientId) {
+        int month = ZonedDateTime.now().getMonthValue();
+        List<Prescription> numberOfPrescriptionInMonth = prescriptionRepository.numberOfPrescriptionInMonth(patientId, month);
+        if(numberOfPrescriptionInMonth.size() >= 3){
+            return false;
         }
+        return true;
+    }
+
+    @Override
+    public PrescriptionResponseDto getPrescriptionById(Long patientId, Long prescriptionId) throws BasicException {
+        Prescription prescription = validatePrescription(prescriptionId, patientId);
+        PrescriptionResponseDto prescriptionResponseDto = prescriptionMapper.prescriptionToPrescriptionResponseDto(prescription);
+        getMedicineName(prescriptionResponseDto);
+        return prescriptionResponseDto;
     }
 }

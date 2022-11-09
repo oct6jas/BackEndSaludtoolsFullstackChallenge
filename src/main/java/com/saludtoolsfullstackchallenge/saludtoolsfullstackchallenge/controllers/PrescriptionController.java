@@ -1,6 +1,7 @@
 package com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.controllers;
 
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.BasicDeleteDto;
+import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PatientResponseDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PrescriptionDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PrescriptionResponseDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.entities.Prescription;
@@ -66,4 +67,21 @@ public class PrescriptionController {
         Page<PrescriptionResponseDto> PrescriptionDtoPage = prescriptionService.findAllPrescriptionByPatientId(patientId, pageable);
         return new ResponseEntity<>(PrescriptionDtoPage , HttpStatus.OK);
     }
+
+    @CrossOrigin
+    @GetMapping(value = "/byid", produces= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PrescriptionResponseDto> getPrescriptionById(@RequestParam(value = "patientId", required = true) Long patientId, @RequestParam(value = "prescriptionId", required = true) Long prescriptionId) throws BasicException {
+        PrescriptionResponseDto prescriptionResponseDto = prescriptionService.getPrescriptionById(patientId, prescriptionId);
+        return new ResponseEntity<>(prescriptionResponseDto , HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/create/validate", produces= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> createValidateForMonth(@RequestParam(value = "patientId", required = true) Long patientId) throws BasicException {
+
+        Boolean canCreate = prescriptionService.createValidateForMonth(patientId);
+        return new ResponseEntity<>(canCreate , HttpStatus.OK);
+    }
+
+
 }

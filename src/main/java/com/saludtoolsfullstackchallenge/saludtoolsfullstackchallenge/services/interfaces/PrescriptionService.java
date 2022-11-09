@@ -18,4 +18,8 @@ public interface PrescriptionService {
     BasicDeleteDto delete(PrescriptionDto dto) throws BasicException;
 
     Page<PrescriptionResponseDto> findAllPrescriptionByPatientId(Long patientId, Pageable pageable);
+
+    PrescriptionResponseDto getPrescriptionById(Long patientId, Long prescriptionId) throws BasicException;
+
+    Boolean createValidateForMonth(Long patientId);
 }

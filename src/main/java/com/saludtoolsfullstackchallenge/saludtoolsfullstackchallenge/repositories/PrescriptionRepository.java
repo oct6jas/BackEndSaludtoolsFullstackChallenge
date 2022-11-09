@@ -12,6 +12,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface PrescriptionRepository extends JpaRepository<Prescription, Long> {
 
@@ -28,5 +30,8 @@ public interface PrescriptionRepository extends JpaRepository<Prescription, Long
 
     @Query("SELECT new com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PrescriptionResponseDto(prescription.id, prescription.createDate, prescription.patientId, prescription.medicineId) FROM Prescription prescription WHERE prescription.patientId = :patientId AND prescription.deleteDate IS NULL")
     Page<PrescriptionResponseDto> findAllPrescriptionByPatientId(@Param("patientId") Long patientId, Pageable pageable);
+
+    @Query("SELECT prescription FROM Prescription prescription WHERE prescription.patientId = :patientId AND MONTH(prescription.createDate) = :month AND prescription.deleteDate IS NULL")
+    List<Prescription> numberOfPrescriptionInMonth(@Param("patientId") Long patientId, @Param("month") int month);
 
 }

@@ -69,7 +69,7 @@ public class PatientController {
 
     @CrossOrigin
     @GetMapping(value = "/byid", produces= MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PatientResponseDto> getPatientById(@RequestParam(value = "patientId", required = false) Long patientId) throws BasicException {
+    public ResponseEntity<PatientResponseDto> getPatientById(@RequestParam(value = "patientId", required = true) Long patientId) throws BasicException {
         PatientResponseDto patientResponseDto = patientService.getPatientById(patientId);
         return new ResponseEntity<>(patientResponseDto , HttpStatus.OK);
     }
