@@ -1,7 +1,6 @@
 package com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.repositories;
 
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.BasicDeleteDto;
-import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PrescriptionDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.dto.PrescriptionResponseDto;
 import com.saludtoolsfullstackchallenge.saludtoolsfullstackchallenge.entities.Prescription;
 import org.springframework.data.domain.Page;
@@ -33,5 +32,8 @@ public interface PrescriptionRepository extends JpaRepository<Prescription, Long
 
     @Query("SELECT prescription FROM Prescription prescription WHERE prescription.patientId = :patientId AND MONTH(prescription.createDate) = :month AND prescription.deleteDate IS NULL")
     List<Prescription> numberOfPrescriptionInMonth(@Param("patientId") Long patientId, @Param("month") int month);
+
+    @Query("SELECT prescription FROM Prescription prescription WHERE prescription.medicineId = :medicineId AND prescription.patientId = :patientId AND MONTH(prescription.createDate) = :month AND prescription.deleteDate IS NULL ")
+    List<Prescription> numberOfPrescriptionInMonthForMedicine(@Param("medicineId") Long medicineId, @Param("patientId") Long patientId, @Param("month") int month);
 
 }

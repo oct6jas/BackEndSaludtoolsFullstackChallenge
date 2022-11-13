@@ -23,6 +23,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 @Service(value = "prescriptionService")
 @Transactional
@@ -70,7 +71,7 @@ public class PrescriptionServiceImplementation implements PrescriptionService {
 
         utilitiesService.validatePatient(dto.getPatientId());
 
-        validateMedicine(dto.getMedicineId());
+        validateMedicine(dto.getMedicineId(), dto.getPatientId());
     }
 
     private Prescription validatePrescription(Long id, Long patientId) throws BasicException {
@@ -88,14 +89,20 @@ public class PrescriptionServiceImplementation implements PrescriptionService {
         return prescription;
     }
 
-    private void validateMedicine(Long medicineId) throws BasicException {
+    private void validateMedicine(Long medicineId, Long patientId) throws BasicException {
         if(isNull(medicineId)){
             throw new BasicException(400, "El id del medicamento no puede ser null");
         }
-        Medicine medicine = medicineRepository.getMedicineById(medicineId);
 
+        Medicine medicine = medicineRepository.getMedicineById(medicineId);
         if(isNull(medicine)){
             throw new BasicException(400, "No existe medicamento con id: " + medicineId);
+        }
+
+        int month = ZonedDateTime.now().getMonthValue();
+        List<Prescription> medicineForMonth = prescriptionRepository.numberOfPrescriptionInMonthForMedicine(medicineId, patientId, month);
+        if(medicineForMonth.size() > 0){
+            throw new BasicException(400, "Este medicamento ya fue prescito este mes. No se puede prescribir el mismo medicamento dentro del mismo mes al mismo paciente");
         }
     }
 
