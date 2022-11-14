@@ -1,1 +1,0 @@
-sudo service your-app start
