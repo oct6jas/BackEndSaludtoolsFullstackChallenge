@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class UtilitiesServiceTest {
-/*
+
     @Autowired
     UtilitiesService utilitiesService;
 
@@ -37,5 +37,5 @@ class UtilitiesServiceTest {
         BasicException basicException = Assertions.assertThrows(BasicException.class, () -> utilitiesService.textDateToZonedDateTime(birthDate) );
         //assert
         Assertions.assertEquals("la fecha no cumple con el formato dd/MM/yyyy, por favor valide la informacion", basicException.getMessage());
-    }*/
+    }
 }
